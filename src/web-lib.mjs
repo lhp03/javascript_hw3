@@ -125,7 +125,6 @@ class HTTPServer {
 
     //redirect
     if (Object.keys(this.redirectMap).includes(req.path)) {
-      console.log("redirct");
       res.status(308);
       res.setHeader("Location", this.redirectMap[req.path]);
       res.send();
@@ -155,17 +154,20 @@ class HTTPServer {
                 }
               });
             } else if (isDirectory) {
-              console.log("directory!");
               fs.readdir(reqPathFull, { withFileTypes: true }, (err, files) => {
                 if (err) {
                   res.status(500);
                   res.send("INTERNAL ERROR!");
                 } else {
-                  console.log(files);
                   let body = "";
-                  for (const f in files) {
-                    body += `<a href="${f.isDirectory + f.name}>${f.name}</a>"`;
-                  }
+
+                  files.forEach((value) => {
+                    body += `<a href="${
+                      value.isDirectory()
+                        ? path.join(value.name, "/")
+                        : value.name
+                    }">${value.name}</a></br>\n`;
+                  });
                   res.setHeader("Content-Type", "text/html");
                   res.status(200);
                   res.send(body);
