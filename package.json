@@ -2,7 +2,7 @@
   "name": "hw3",
   "version": "1.0.0",
   "description": "hw3",
-  "main": "index.js",
+  "main": "server.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/lhp03/javascript_hw3#readme",
   "devDependencies": {
-    "markdown-it": "^13.0.1"
+    "fs": "^0.0.1-security",
+    "markdown-it": "^13.0.1",
+    "net": "^1.0.2",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
   }
 }
