@@ -132,12 +132,10 @@ class HTTPServer {
       fs.access(reqPathFull, fs.constants.F_OK, (err) => {
         if (err) {
           //path (file or dir) does NOT exist in root directory!
-          //console.log("NOT Readable!");
           res.status(404);
           res.send("NOT FOUND!");
         } else {
           //path (file or dir) is readable
-          //console.log("Readable!");
           fs.stat(reqPathFull, (err, stats) => {
             const isDirectory = stats.isDirectory();
             const isFile = stats.isFile();
@@ -149,6 +147,12 @@ class HTTPServer {
                   res.status(500);
                   res.send("INTERNAL ERROR!");
                 } else {
+                  //markdown
+                  if (path.extname(reqPathFull) === ".md") {
+                    const markdown = MarkdownIt({ html: true });
+                    data = markdown.render(data.toString());
+                  }
+
                   res.status(200);
                   res.send(data);
                 }

@@ -9,6 +9,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const PORT = 3000;
+const HOST = "localhost";
+
 const readConfig = (callback) => {
   fs.readFile(path.join(__dirname, "config.json"), "utf-8", (err, data) => {
     if (err) {
@@ -26,9 +29,8 @@ const setServer = (config) => {
     config.redirect_map
   );
 
-  console.log("SETSERVER");
-
-  httpServer.listen(3000, "localhost");
+  httpServer.listen(PORT, HOST);
+  console.log(`LISTENING ${PORT}...`);
 };
 
 readConfig(setServer);
