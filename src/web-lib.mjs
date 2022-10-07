@@ -2,7 +2,6 @@ import * as path from "path";
 import * as net from "net";
 import * as fs from "fs";
 import MarkdownIt from "markdown-it";
-import { send } from "process";
 
 const MIME_TYPES = {
   jpg: "image/jpg",
@@ -145,21 +144,31 @@ class HTTPServer {
             const isFile = stats.isFile();
 
             if (isFile) {
-              res.status(200);
               res.setHeader("Content-Type", getMIMEType(reqPathFull));
               fs.readFile(reqPathFull, (err, data) => {
                 if (err) {
                   res.status(500);
                   res.send("INTERNAL ERROR!");
                 } else {
+                  res.status(200);
                   res.send(data);
                 }
               });
             } else if (isDirectory) {
+              console.log("directory!");
               fs.readdir(reqPathFull, { withFileTypes: true }, (err, files) => {
                 if (err) {
                   res.status(500);
                   res.send("INTERNAL ERROR!");
+                } else {
+                  console.log(files);
+                  let body = "";
+                  for (const f in files) {
+                    body += `<a href="${f.isDirectory + f.name}>${f.name}</a>"`;
+                  }
+                  res.setHeader("Content-Type", "text/html");
+                  res.status(200);
+                  res.send(body);
                 }
               });
             }
